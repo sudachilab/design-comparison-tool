@@ -39,13 +39,22 @@ function readBorder(cell, side) {
 }
 
 function getCellBorders(sheet, XLSX, row, col, merge) {
-  if (!merge) {
-    const cell = sheet[XLSX.utils.encode_cell({ r: row, c: col })];
+  const cellBorders = sheet['!cellBorders'];
+  const getBorders = (cellRow, cellCol) => {
+    const address = XLSX.utils.encode_cell({ r: cellRow, c: cellCol });
+    const border = cellBorders?.get(address);
+    if (border) return border;
+
+    const cell = sheet[address];
     return Object.fromEntries(
       ['top', 'right', 'bottom', 'left']
         .map((side) => [side, readBorder(cell, side)])
-        .filter(([, border]) => border),
+        .filter(([, value]) => value),
     );
+  };
+
+  if (!merge) {
+    return getBorders(row, col);
   }
 
   const { startRow, endRow, startCol, endCol } = merge;
@@ -71,8 +80,7 @@ function getCellBorders(sheet, XLSX, row, col, merge) {
 
   for (const [side, cells] of Object.entries(edges)) {
     for (const [cellRow, cellCol, cellSide] of cells) {
-      const cell = sheet[XLSX.utils.encode_cell({ r: cellRow, c: cellCol })];
-      const border = readBorder(cell, cellSide);
+      const border = getBorders(cellRow, cellCol)[cellSide];
       if (border) {
         borders[side] = border;
         break;
