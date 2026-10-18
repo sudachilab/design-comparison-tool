@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>設計書比較ツール</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>設計書比較ツール</h1>
+    <p>5種類の設計書を並べて確認し、概要番号から関連箇所へ移動できます。ファイルはブラウザ内で処理します。</p>
+  </header>
+
+  <main>
+    <section class="workspace-tools" aria-label="ファイルと検索">
+      <div class="upload-panel">
+        <div class="section-heading">
+          <span class="eyebrow">WORKSPACE</span>
+          <h2>設計書を読み込む</h2>
+        </div>
+        <div class="upload-list">
+          <label class="upload-field">
+            <span>要件定義書</span>
+            <input id="requirementsFile" type="file" accept=".xlsx,.xls">
+          </label>
+          <label class="upload-field">
+            <span>基本設計書</span>
+            <input id="basicFile" type="file" accept=".xlsx,.xls">
+          </label>
+          <label class="upload-field">
+            <span>外部設計書</span>
+            <input id="externalFile" type="file" accept=".xlsx,.xls">
+          </label>
+          <label class="upload-field">
+            <span>詳細設計書</span>
+            <input id="detailedFile" type="file" accept=".xlsx,.xls">
+          </label>
+          <label class="upload-field">
+            <span>内部設計書</span>
+            <input id="internalFile" type="file" accept=".xlsx,.xls">
+          </label>
+        </div>
+      </div>
+
+      <div class="search-panel">
+        <label for="search">シート内検索</label>
+        <div class="search-controls">
+          <input id="search" type="search" placeholder="文字や番号を入力">
+          <button id="searchBtn" type="button">検索</button>
+          <button id="resetBtn" class="button-muted" type="button">クリア</button>
+        </div>
+        <p class="interaction-hint">
+          基本設計書の色付き概要番号をクリックすると、要件定義書以外の関連箇所へ移動します。
+        </p>
+      </div>
+    </section>
+
+    <p id="status" role="status" aria-live="polite">
+      Excelファイルを選択してください。概要番号は同じ番号ごとに色分けされます。
+    </p>
+
+    <section class="panes" aria-label="設計書一覧">
+      <article class="pane pane-basic">
+        <div class="pane-head">
+          <div>
+            <span class="pane-index">01 / BASIC</span>
+            <h2>基本設計書</h2>
+          </div>
+          <div class="pane-controls">
+            <div class="zoom-controls" data-zoom-controls="basic">
+              <button type="button" data-zoom-step="-10" aria-label="基本設計書を縮小">−</button>
+              <input
+                id="basicZoom"
+                type="range"
+                min="50"
+                max="200"
+                step="10"
+                value="100"
+                aria-label="基本設計書の表示倍率"
+              >
+              <button type="button" data-zoom-step="10" aria-label="基本設計書を拡大">＋</button>
+              <output id="basicZoomValue" for="basicZoom">100%</output>
+              <button type="button" class="zoom-reset" data-zoom-reset>リセット</button>
+            </div>
+            <select id="basicSheet" aria-label="基本設計書のシート"></select>
+          </div>
+        </div>
+        <div id="basicGrid" class="grid-scroll">
+          <p class="empty">ファイル未選択</p>
+        </div>
+      </article>
+
+      <article class="pane">
+        <div class="pane-head">
+          <div>
+            <span class="pane-index">02 / EXTERNAL</span>
+            <h2>外部設計書</h2>
+          </div>
+          <select id="externalSheet" aria-label="外部設計書のシート"></select>
+        </div>
+        <div id="externalGrid" class="grid-scroll">
+          <p class="empty">ファイル未選択</p>
+        </div>
+      </article>
+
+      <article class="pane">
+        <div class="pane-head">
+          <div>
+            <span class="pane-index">03 / DETAILED</span>
+            <h2>詳細設計書</h2>
+          </div>
+          <select id="detailedSheet" aria-label="詳細設計書のシート"></select>
+        </div>
+        <div id="detailedGrid" class="grid-scroll">
+          <p class="empty">ファイル未選択</p>
+        </div>
+      </article>
+
+      <article class="pane">
+        <div class="pane-head">
+          <div>
+            <span class="pane-index">04 / INTERNAL</span>
+            <h2>内部設計書</h2>
+          </div>
+          <div class="pane-controls">
+            <div class="zoom-controls" data-zoom-controls="internal">
+              <button type="button" data-zoom-step="-10" aria-label="内部設計書を縮小">−</button>
+              <input
+                id="internalZoom"
+                type="range"
+                min="50"
+                max="200"
+                step="10"
+                value="100"
+                aria-label="内部設計書の表示倍率"
+              >
+              <button type="button" data-zoom-step="10" aria-label="内部設計書を拡大">＋</button>
+              <output id="internalZoomValue" for="internalZoom">100%</output>
+              <button type="button" class="zoom-reset" data-zoom-reset>リセット</button>
+            </div>
+            <select id="internalSheet" aria-label="内部設計書のシート"></select>
+          </div>
+        </div>
+        <div id="internalGrid" class="grid-scroll">
+          <p class="empty">ファイル未選択</p>
+        </div>
+      </article>
+
+      <article class="pane pane-requirements">
+        <div class="pane-head">
+          <div>
+            <span class="pane-index">05 / REQUIREMENTS</span>
+            <h2>要件定義書 <span class="pane-note">番号連動なし</span></h2>
+          </div>
+          <select id="requirementsSheet" aria-label="要件定義書のシート"></select>
+        </div>
+        <div id="requirementsGrid" class="grid-scroll">
+          <p class="empty">ファイル未選択</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

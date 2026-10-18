@@ -1,0 +1,571 @@
+:root {
+  font-family: 'Noto Sans JP', system-ui, sans-serif;
+  color: #172a3b;
+  background: #f3f6fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+header {
+  padding: 22px 28px;
+  background: #174e79;
+  color: white;
+}
+
+header h1 {
+  font-size: 1.45rem;
+  margin: 0 0 6px;
+}
+
+header p {
+  margin: 0;
+  font-size: 0.87rem;
+  color: #e0edf7;
+}
+
+main {
+  padding: 18px;
+  max-width: 1800px;
+  margin: auto;
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+  background: white;
+  border: 1px solid #dbe3eb;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.toolbar label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.toolbar input {
+  max-width: 250px;
+}
+
+.toolbar input,
+.toolbar button,
+.pane select {
+  padding: 8px;
+  border: 1px solid #bfcdd9;
+  border-radius: 6px;
+  background: white;
+}
+
+.toolbar button {
+  background: #174e79;
+  color: white;
+  cursor: pointer;
+  border: 0;
+  padding: 10px 14px;
+}
+
+.toolbar button:last-child {
+  background: #607488;
+}
+
+#status {
+  font-size: 0.85rem;
+  color: #3e596d;
+  min-height: 20px;
+}
+
+.panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.pane {
+  min-width: 0;
+  background: white;
+  border: 1px solid #dbe3eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pane-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #dbe3eb;
+}
+
+.pane-head h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.pane select {
+  max-width: 55%;
+}
+
+.grid-scroll {
+  height: 65vh;
+  overflow: auto;
+}
+
+.excel-grid {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: max-content;
+  min-width: 100%;
+  font-size: 0.83rem;
+}
+
+.excel-grid th,
+.excel-grid td {
+  border: 1px solid #c9d5e0;
+  min-width: 100px;
+  max-width: 380px;
+  padding: 8px 10px;
+  vertical-align: top;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.excel-grid th {
+  background: #eaf1f7;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  min-width: 46px;
+}
+
+.excel-grid .row-number {
+  min-width: 46px;
+  width: 46px;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #edf3f8;
+  font-weight: 500;
+  text-align: center;
+}
+
+.excel-grid th.corner {
+  left: 0;
+  z-index: 3;
+}
+
+.excel-grid td.match {
+  background: #fff1a6;
+  outline: 2px solid #e1ac1d;
+  outline-offset: -2px;
+}
+
+.empty {
+  color: #718294;
+  text-align: center;
+  padding: 35px 10px;
+}
+
+@media (max-width: 850px) {
+  .panes {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-scroll {
+    height: 48vh;
+  }
+}
+
+header {
+  padding: 28px clamp(18px, 4vw, 56px);
+  background:
+    radial-gradient(circle at 88% 12%, rgb(95 190 166 / 22%), transparent 26%),
+    linear-gradient(118deg, #123a48, #1a5860 68%, #28736d);
+}
+
+header h1 {
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  letter-spacing: 0.04em;
+}
+
+header p {
+  max-width: 780px;
+  line-height: 1.7;
+}
+
+main {
+  max-width: 1900px;
+  padding: 24px clamp(14px, 2vw, 30px) 40px;
+}
+
+.workspace-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(270px, 0.8fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.upload-panel,
+.search-panel {
+  border: 1px solid #d7e2de;
+  border-radius: 12px;
+  background: #fffefa;
+  box-shadow: 0 8px 24px rgb(24 59 57 / 5%);
+}
+
+.upload-panel {
+  padding: 16px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.eyebrow,
+.pane-index {
+  color: #56817a;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.upload-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(125px, 1fr));
+  gap: 9px;
+}
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #e0e8e4;
+  border-radius: 8px;
+  background: #f7faf7;
+  color: #274a4b;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.upload-field input {
+  width: 100%;
+  min-width: 0;
+  color: #607274;
+  font-size: 0.68rem;
+}
+
+.upload-field input::file-selector-button {
+  margin-right: 6px;
+  padding: 5px 7px;
+  border: 0;
+  border-radius: 5px;
+  background: #e2efea;
+  color: #27564f;
+  cursor: pointer;
+  font: inherit;
+}
+
+.search-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px;
+}
+
+.search-panel > label {
+  margin-bottom: 7px;
+  color: #274a4b;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.search-controls {
+  display: flex;
+  gap: 7px;
+}
+
+.search-controls input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #c8d8d2;
+  border-radius: 6px;
+  background: white;
+}
+
+.search-controls button {
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #246c65;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.search-controls .button-muted {
+  background: #e5ece9;
+  color: #49625f;
+}
+
+.interaction-hint {
+  margin: 9px 0 0;
+  color: #70817d;
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+
+#status {
+  min-height: 22px;
+  margin: 14px 2px;
+  color: #45615d;
+  line-height: 1.5;
+}
+
+.panes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.pane {
+  border-color: #d7e2de;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(24 59 57 / 5%);
+}
+
+.pane-basic {
+  border-top: 3px solid #28736d;
+}
+
+.pane-head {
+  min-height: 65px;
+  padding: 11px 14px;
+  background: #fffefa;
+}
+
+.pane-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.zoom-controls button {
+  display: inline-grid;
+  place-items: center;
+  min-width: 27px;
+  height: 27px;
+  padding: 0 6px;
+  border: 1px solid #d0ddd8;
+  border-radius: 5px;
+  background: #f5f8f5;
+  color: #375653;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.zoom-controls button:hover {
+  background: #e7f0eb;
+}
+
+.zoom-controls input[type='range'] {
+  width: clamp(70px, 9vw, 112px);
+  accent-color: #28736d;
+}
+
+.zoom-controls output {
+  min-width: 42px;
+  color: #274a4b;
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: center;
+}
+
+.zoom-controls .zoom-reset {
+  min-width: 48px;
+  font-size: 0.67rem;
+}
+
+.pane-head h2 {
+  margin-top: 2px;
+  color: #1b3d42;
+  font-size: 0.96rem;
+}
+
+.pane select {
+  max-width: 48%;
+  padding: 7px 9px;
+  border-color: #d0ddd8;
+  color: #375653;
+}
+
+.pane-note {
+  display: inline-block;
+  margin-left: 5px;
+  color: #8a9691;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.grid-scroll {
+  height: 55vh;
+  background: #fffefa;
+}
+
+.grid-zoom-wrapper {
+  position: relative;
+  transform-origin: top left;
+}
+
+.excel-grid {
+  font-size: 0.8rem;
+}
+
+.excel-grid th,
+.excel-grid td {
+  border-color: #d8e1dc;
+}
+
+.excel-grid thead th {
+  background: #edf3ef;
+  color: #48625d;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.excel-grid tbody th.row-number {
+  position: sticky;
+  left: 0;
+  top: auto;
+  z-index: 2;
+  background: #e9f0eb;
+}
+
+.excel-grid th.corner {
+  background: #dfeae4;
+  left: 0;
+  z-index: 4;
+}
+
+.excel-grid {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 0;
+  --grid-scale: 1;
+  font-size: calc(0.8rem * var(--grid-scale));
+}
+
+.excel-grid th,
+.excel-grid td {
+  min-width: calc(100px * var(--grid-scale));
+  max-width: calc(380px * var(--grid-scale));
+  padding:
+    calc(8px * var(--grid-scale))
+    calc(10px * var(--grid-scale));
+  border-width: calc(1px * var(--grid-scale));
+}
+
+.excel-grid thead th {
+  min-width: calc(46px * var(--grid-scale));
+}
+
+.excel-grid tbody th.row-number {
+  min-width: calc(46px * var(--grid-scale));
+  width: calc(46px * var(--grid-scale));
+}
+
+.excel-grid td.overview-reference {
+  background-color: var(--overview-color);
+  color: #183638;
+  font-weight: 700;
+}
+
+.pane-basic .excel-grid td.overview-reference {
+  cursor: pointer;
+}
+
+.pane-basic .excel-grid td.overview-reference:hover {
+  box-shadow: inset 0 0 0 2px #246c65;
+}
+
+.excel-grid td.linked-match {
+  position: relative;
+  z-index: 1;
+  outline: calc(3px * var(--grid-scale)) solid #16796d;
+  outline-offset: calc(-3px * var(--grid-scale));
+}
+
+.empty {
+  color: #7b8b85;
+}
+
+@media (max-width: 1100px) {
+  .workspace-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-list {
+    grid-template-columns: repeat(3, minmax(130px, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .panes {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-scroll {
+    height: 48vh;
+  }
+}
+
+@media (max-width: 520px) {
+  .upload-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-controls {
+    flex-wrap: wrap;
+  }
+
+  .pane-head {
+    align-items: flex-start;
+  }
+
+  .zoom-controls {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
