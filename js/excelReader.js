@@ -11,6 +11,7 @@ export async function readExcel(file) {
     type: 'array',
     cellText: true,
     cellDates: true,
+    cellStyles: true,
   });
 }
 

@@ -3,6 +3,99 @@ import {
   getOverviewColor,
 } from './overviewNumbers.js';
 
+const borderStyles = {
+  thin: { width: 1, style: 'solid' },
+  medium: { width: 2, style: 'solid' },
+  thick: { width: 3, style: 'solid' },
+  hair: { width: 1, style: 'solid' },
+  dashed: { width: 1, style: 'dashed' },
+  mediumDashed: { width: 2, style: 'dashed' },
+  dotted: { width: 1, style: 'dotted' },
+  dashDot: { width: 1, style: 'dashed' },
+  mediumDashDot: { width: 2, style: 'dashed' },
+  dashDotDot: { width: 1, style: 'dashed' },
+  mediumDashDotDot: { width: 2, style: 'dashed' },
+  slantDashDot: { width: 1, style: 'dashed' },
+  double: { width: 3, style: 'double' },
+};
+
+function readBorder(cell, side) {
+  const border = cell?.s?.border?.[side];
+  if (!border?.style || border.style === 'none') return null;
+
+  if (!Object.prototype.hasOwnProperty.call(borderStyles, border.style)) {
+    return null;
+  }
+  const appearance = borderStyles[border.style];
+  const result = { ...appearance };
+  const rgb = border.color?.rgb;
+  if (typeof rgb === 'string' && /^(?:[0-9a-f]{6}|[0-9a-f]{8})$/i.test(rgb)) {
+    result.color = `#${rgb.slice(-6)}`;
+  } else if (!border.color || border.color.auto || border.color.indexed === 64) {
+    result.color = '#000000';
+  }
+
+  return result;
+}
+
+function getCellBorders(sheet, XLSX, row, col, merge) {
+  if (!merge) {
+    const cell = sheet[XLSX.utils.encode_cell({ r: row, c: col })];
+    return Object.fromEntries(
+      ['top', 'right', 'bottom', 'left']
+        .map((side) => [side, readBorder(cell, side)])
+        .filter(([, border]) => border),
+    );
+  }
+
+  const { startRow, endRow, startCol, endCol } = merge;
+  const borders = {};
+  const edges = {
+    top: Array.from(
+      { length: endCol - startCol + 1 },
+      (_, i) => [startRow, startCol + i, 'top'],
+    ),
+    right: Array.from(
+      { length: endRow - startRow + 1 },
+      (_, i) => [startRow + i, endCol, 'right'],
+    ),
+    bottom: Array.from(
+      { length: endCol - startCol + 1 },
+      (_, i) => [endRow, startCol + i, 'bottom'],
+    ),
+    left: Array.from(
+      { length: endRow - startRow + 1 },
+      (_, i) => [startRow + i, startCol, 'left'],
+    ),
+  };
+
+  for (const [side, cells] of Object.entries(edges)) {
+    for (const [cellRow, cellCol, cellSide] of cells) {
+      const cell = sheet[XLSX.utils.encode_cell({ r: cellRow, c: cellCol })];
+      const border = readBorder(cell, cellSide);
+      if (border) {
+        borders[side] = border;
+        break;
+      }
+    }
+  }
+
+  return borders;
+}
+
+function applyCellBorders(cellElement, borders) {
+  for (const [side, border] of Object.entries(borders)) {
+    cellElement.style.setProperty(
+      `border-${side}-width`,
+      `calc(${border.width}px * var(--grid-scale))`,
+    );
+    cellElement.style.setProperty(`border-${side}-style`, border.style);
+    if (border.color) {
+      cellElement.style.setProperty(`border-${side}-color`, border.color);
+    }
+  }
+}
+
 /** Build a read-only HTML table, preserving blank positions and merged ranges. */
 export function renderGrid(container, sheet) {
   container.replaceChildren();
@@ -38,6 +131,10 @@ export function renderGrid(container, sheet) {
     mergeStart.set(`${startRow}:${startCol}`, {
       rowspan: endRow - startRow + 1,
       colspan: endCol - startCol + 1,
+      startRow,
+      endRow,
+      startCol,
+      endCol,
     });
 
     for (let row = startRow; row <= endRow; row++) {
@@ -91,6 +188,10 @@ export function renderGrid(container, sheet) {
       cellElement.textContent = cell
         ? String(cell.w ?? cell.v ?? '')
         : '';
+      applyCellBorders(
+        cellElement,
+        getCellBorders(sheet, XLSX, row, col, merge),
+      );
 
       const overviewNumbers = extractOverviewNumbers(cellElement.textContent);
       if (overviewNumbers.length > 0) {
